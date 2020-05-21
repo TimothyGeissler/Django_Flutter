@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              child: Text("API Call"),
+              child: Text("API Call GET"),
               onPressed: () async {
                 //make API call
                 var url = 'http://10.0.2.2:8000/heroes/';
@@ -57,7 +57,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 t.map((item) => Superhero.fromJson(item)).toList();
                 print(hero_obj[0].name);
               },
-            )
+            ),
+            RaisedButton(
+              child: Text("API Call POST"),
+              onPressed: () async {
+                var url = 'http://10.0.2.2:8000/logins/';
+                String username = 'timg', password = 'pass';
+                String jsonBody = '{"email":$username,"password":$password}';
+                var response = await http.post(
+                  url,
+                  headers: <String, String>{
+                    'Content-Type': 'application/json',
+                  },
+                  body: jsonEncode(<String, String>{
+                    'username': username,
+                    'password': password,
+                  })
+                );
+                print(response.statusCode);
+              },
+            ),
           ],
         ),
       ),
