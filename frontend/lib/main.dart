@@ -77,6 +77,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 print(response.statusCode);
               },
             ),
+            RaisedButton(
+              child: Text("API Login"),
+              onPressed: () async {
+                var url = 'http://10.0.2.2:8000/user_login/';
+                String username = 'tim', password = 'password';
+                var loginMap = new Map<String, dynamic>();
+                loginMap['username'] = username;
+                loginMap['password'] = password;
+                var response = await http.post(
+                    url,
+                    //headers:{'Content-Type':'application/form-data'},
+                    body: loginMap/*jsonEncode(<String, String>{
+                      'username': username,
+                      'password': password,
+                    })*/
+                );
+                print(response.body + " : " + response.statusCode.toString());
+              },
+            )
           ],
         ),
       ),

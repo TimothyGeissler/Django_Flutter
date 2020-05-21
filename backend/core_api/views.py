@@ -27,7 +27,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponse("Correct login details")
             else:
                 return HttpResponse("Your account was inactive.")
         else:
@@ -36,4 +36,4 @@ def user_login(request):
             return HttpResponse("Invalid login details given")
     else:
         # return render(request, 'dappx/login.html', {})
-        return HttpResponse("Login details valid")
+        return HttpResponse("Return to login")
