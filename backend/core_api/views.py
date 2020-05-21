@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import HeroSerializer, LoginSerializer
-from .models import Hero, Login
+from .serializers import HeroSerializer, UserSerializer
+from .models import Hero, Users
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from .forms import SignupForm
 
 
 # Create your views here.
@@ -14,9 +16,9 @@ class HeroViewSet(viewsets.ModelViewSet):
     serializer_class = HeroSerializer
 
 
-class LoginViewSet(viewsets.ModelViewSet):
-    queryset = Login.objects.all().order_by('username')
-    serializer_class = LoginSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = Users.objects.all().order_by('username')
+    serializer_class = UserSerializer
 
 
 def user_login(request):
@@ -37,3 +39,23 @@ def user_login(request):
     else:
         # return render(request, 'dappx/login.html', {})
         return HttpResponse("Return to login")
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return HttpResponse("Signup successful: " + username + ", " + raw_password)
+        else:
+            print(form.errors)
+            return HttpResponse("Signup unsuccessful: " + form.errors)
+    else:
+        form = UserCreationForm()
+        return HttpResponse("POST required for /user_register")
+    #return render(request, 'signup.html', {'form': form})
+

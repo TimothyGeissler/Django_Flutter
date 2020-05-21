@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Hero, Login
+from .models import Hero, Users
 
 
 class HeroSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,7 +8,7 @@ class HeroSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('name', 'alias')
 
 
-class LoginSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Login
+        model = Users
         fields = ('username', 'password')
